@@ -108,9 +108,9 @@ export class Orderbook {
         });
       }
     }
-    for (let i = 0; i < this.bids.length; i++) {
-      if (this.bids[i].filled === this.bids[i].quantity) {
-        this.bids.splice(i, 1);
+    for (let i = 0; i < this.asks.length; i++) {
+      if (this.asks[i].filled === this.asks[i].quantity) {
+        this.asks.splice(i, 1);
         i--;
       }
     }
@@ -152,35 +152,10 @@ export class Orderbook {
       executedQty,
     };
   }
-
-  //   getDepth() {
-  //     const bids: [string, string][] = [];
-  //     const asks: [string, string][] = [];
-  //     const ordersObj: { [key: string]: number } = {};
-
-  //     // Assuming this.bids and this.asks are arrays of order objects with 'price' and 'quantity' properties
-  //     for (const order of [...this.bids, ...this.asks]) {
-  //       const { price, quantity } = order;
-  //       if (!ordersObj[price]) {
-  //         ordersObj[price] = 0;
-  //       }
-  //       ordersObj[price] += quantity;
-  //     }
-
-  //     for (const price in ordersObj) {
-  //       if (ordersObj[price] > 0) {
-  //         bids.push([price, ordersObj[price].toString()]);
-  //       } else {
-  //         asks.push([price, (-ordersObj[price]).toString()]);
-  //       }
-  //     }
-
-  //     return {
-  //       bids,
-  //       asks,
-  //     };
-  //   }
-
+//   888888888888888888888888888888888888888888888888888888888888888888888
+// 888888888888888888888888888888888888888888888888888888888888888888888888
+// ----------------------------------------------------------go through this
+  //TODO: Can you make this faster? Can you compute this during order matches?
   getDepth() {
     const bids: [string, string][] = [];
     const asks: [string, string][] = [];
@@ -217,23 +192,25 @@ export class Orderbook {
       asks,
     };
   }
+// -------------------------
+// =============================
   getOpenOrders(userId: string): Order[] {
     const asks = this.asks.filter((x) => x.userId === userId);
     const bids = this.bids.filter((x) => x.userId === userId);
     return [...asks, ...bids];
   }
+
   cancelBid(order: Order) {
     const index = this.bids.findIndex((x) => x.orderId === order.orderId);
     if (index !== -1) {
-      const price = this.asks[index].price;
+      const price = this.bids[index].price;
       this.bids.splice(index, 1);
       return price;
     }
   }
-  cancelAsks(order: Order) {
-    const index = this.asks.findIndex((x) => {
-      x.orderId === order.orderId;
-    });
+
+  cancelAsk(order: Order) {
+    const index = this.asks.findIndex((x) => x.orderId === order.orderId);
     if (index !== -1) {
       const price = this.asks[index].price;
       this.asks.splice(index, 1);

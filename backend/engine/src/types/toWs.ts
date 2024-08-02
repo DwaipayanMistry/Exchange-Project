@@ -1,3 +1,5 @@
+//TODO: Can we share the types between the ws layer and the engine?
+
 export type TickerUpdateMessage = {
   stream: string;
   data: {
@@ -11,6 +13,7 @@ export type TickerUpdateMessage = {
     e: "ticker";
   };
 };
+
 export type DepthUpdateMessage = {
   stream: string;
   data: {
@@ -19,7 +22,8 @@ export type DepthUpdateMessage = {
     e: "depth";
   };
 };
-export type TradeAddressMessage = {
+
+export type TradeAddedMessage = {
   stream: string;
   data: {
     e: "trade";
@@ -27,8 +31,11 @@ export type TradeAddressMessage = {
     m: boolean;
     p: string;
     q: string;
-    s: string;
+    s: string; // symbol
   };
 };
 
-export type WsMessage= TickerUpdateMessage | DepthUpdateMessage | TradeAddressMessage;
+export type WsMessage =
+  | TickerUpdateMessage
+  | DepthUpdateMessage
+  | TradeAddedMessage;

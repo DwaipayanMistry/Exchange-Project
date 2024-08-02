@@ -1,7 +1,7 @@
 import { init } from "next/dist/compiled/webpack/webpack";
 import { Ticker } from "./types";
 
-export const BASE_URL = "wss://localhost:30003/";
+export const BASE_URL = "ws://localhost:3004";
 
 export class SignalingManager {
   private ws: WebSocket;
